@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TBC Anniversary Countdown</title>
+  <style>
+    :root{
+      --fel:#00ff85;
+      --fel2:#00c86a;
+      --ember:#ff7a18;
+      --ink:#06080a;
+      --panel: rgba(8, 12, 10, 0.72);
+      --border: rgba(0, 255, 133, 0.35);
+      --glow: 0 0 24px rgba(0,255,133,.28), 0 0 48px rgba(0,255,133,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      color:#e8fff3;
+      background:
+        radial-gradient(1200px 700px at 70% 20%, rgba(0,255,133,.10), transparent 55%),
+        radial-gradient(900px 600px at 20% 80%, rgba(255,122,24,.10), transparent 55%),
+        linear-gradient(180deg, #050708, #020303 70%, #010202);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      overflow:hidden;
+    }
+    /* subtle animated “fel” haze */
+    .haze{
+      position:fixed; inset:-30%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(0,255,133,.12), transparent 45%),
+        radial-gradient(circle at 70% 55%, rgba(0,255,133,.10), transparent 50%),
+        radial-gradient(circle at 45% 75%, rgba(255,122,24,.08), transparent 55%);
+      filter: blur(28px);
+      animation: drift 14s ease-in-out infinite alternate;
+      pointer-events:none;
+      opacity:.9;
+    }
+    @keyframes drift{
+      from{ transform: translate(-2%, -1%) scale(1.02); }
+      to{ transform: translate(2%, 1%) scale(1.05); }
+    }
+
+    .wrap{
+      width:min(980px, 92vw);
+      padding: clamp(18px, 3vw, 34px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: var(--glow);
+      position:relative;
+    }
+    .wrap:before{
+      content:"";
+      position:absolute; inset:-1px;
+      border-radius:18px;
+      background: linear-gradient(135deg, rgba(0,255,133,.18), rgba(255,122,24,.10), rgba(0,255,133,.10));
+      filter: blur(18px);
+      opacity:.55;
+      z-index:-1;
+    }
+
+    .top{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px 16px;
+      align-items:baseline;
+      justify-content:space-between;
+      margin-bottom: 18px;
+    }
+    .kicker{
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      font-size: 12px;
+      color: rgba(232,255,243,.72);
+    }
+    h1{
+      margin:6px 0 0;
+      font-size: clamp(26px, 3.2vw, 42px);
+      line-height:1.08;
+      font-weight:800;
+      text-shadow: 0 0 18px rgba(0,255,133,.22);
+    }
+    .sub{
+      margin: 10px 0 0;
+      color: rgba(232,255,243,.82);
+      font-size: 14px;
+      line-height:1.45;
+    }
+    .sub b{ color: var(--fel); font-weight:700; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    @media (max-width:720px){
+      .grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .card{
+      border:1px solid rgba(0,255,133,.22);
+      border-radius: 14px;
+      padding: 16px 14px;
+      background: rgba(0,0,0,.35);
+      box-shadow: inset 0 0 0 1px rgba(255,122,24,.06);
+    }
+    .num{
+      font-variant-numeric: tabular-nums;
+      font-size: clamp(28px, 5vw, 54px);
+      font-weight: 900;
+      letter-spacing: .02em;
+      color: #eafff6;
+      text-shadow: 0 0 18px rgba(0,255,133,.20);
+    }
+    .lbl{
+      margin-top: 6px;
+      color: rgba(232,255,243,.70);
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 11px;
+    }
+
+    .bar{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0,255,133,.14);
+      flex-wrap:wrap;
+    }
+    .target{
+      color: rgba(232,255,243,.78);
+      font-size: 13px;
+    }
+    .target code{
+      background: rgba(0,255,133,.10);
+      border: 1px solid rgba(0,255,133,.18);
+      padding: 2px 8px;
+      border-radius: 999px;
+      color: rgba(232,255,243,.92);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    .status{
+      font-size: 13px;
+      color: rgba(232,255,243,.78);
+    }
+    .status .ok{ color: var(--fel); font-weight:700; }
+    .status .done{ color: var(--ember); font-weight:800; }
+
+    .footer{
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(232,255,243,.55);
+    }
+    .footer span{ color: rgba(0,255,133,.75); }
+  </style>
+</head>
+<body>
+  <div class="haze" aria-hidden="true"></div>
+
+  <main class="wrap">
+    <div class="top">
+      <div>
+        <div class="kicker">World of Warcraft • The Burning Crusade</div>
+        <h1>Anniversary Countdown</h1>
+        <p class="sub">
+          Counting down to <b>February 5</b> at <b>23:00 GMT</b>.
+          <span style="opacity:.75">(Fel portals optional.)</span>
+        </p>
+      </div>
+      <div class="status" id="status">Status: <span class="ok">Charging the Dark Portal…</span></div>
+    </div>
+
+    <section class="grid" aria-label="Countdown">
+      <div class="card"><div class="num" id="days">00</div><div class="lbl">Days</div></div>
+      <div class="card"><div class="num" id="hours">00</div><div class="lbl">Hours</div></div>
+      <div class="card"><div class="num" id="minutes">00</div><div class="lbl">Minutes</div></div>
+      <div class="card"><div class="num" id="seconds">00</div><div class="lbl">Seconds</div></div>
+    </section>
+
+    <div class="bar">
+      <div class="target">
+        Target (UTC): <code id="targetText">—</code>
+      </div>
+      <div class="target">
+        Your local time: <code id="localText">—</code>
+      </div>
+    </div>
+
+    <div class="footer">
+      Tip: Want it for OBS? Add this file as a <span>Browser Source</span>.
+    </div>
+  </main>
+
+  <script>
+    // === EDIT THIS IF YOU MEANT A DIFFERENT YEAR ===
+    const TARGET_YEAR = 2026;
+    // Target: February 5 at 23:00 GMT (UTC)
+    const targetUtcMs = Date.UTC(TARGET_YEAR, 1, 5, 23, 0, 0); // month is 0-based (1 = Feb)
+    const targetDate = new Date(targetUtcMs);
+
+    const el = (id) => document.getElementById(id);
+    const pad2 = (n) => String(n).padStart(2, "0");
+
+    el("targetText").textContent = targetDate.toISOString().replace(".000Z","Z");
+
+    function tick(){
+      const now = Date.now();
+      let diff = targetUtcMs - now;
+
+      if (diff <= 0){
+        el("days").textContent = "00";
+        el("hours").textContent = "00";
+        el("minutes").textContent = "00";
+        el("seconds").textContent = "00";
+        el("status").innerHTML = 'Status: <span class="done">The Dark Portal is OPEN.</span>';
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      el("days").textContent = String(days);
+      el("hours").textContent = pad2(hours);
+      el("minutes").textContent = pad2(minutes);
+      el("seconds").textContent = pad2(seconds);
+
+      el("localText").textContent = new Date(targetUtcMs).toLocaleString(undefined, {
+        year: "numeric", month: "short", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", second: "2-digit"
+      });
+    }
+
+    tick();
+    setInterval(tick, 250);
+  </script>
+</body>
+</html>
